@@ -1,0 +1,344 @@
+<html lang="pt-br">
+  <head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+		<title>Hospital boa saúde!</title>
+  </head>
+  <body>
+		<h1>&nbsp &nbsp &nbsp Hospital boa saúde!</h1>
+		&nbsp &nbsp &nbsp
+		<label for="pessoa">Informe o nome: </label>
+		<input class="form-group"type=text id=pessoa>
+		<button class="btn btn-secondary" id=inserir>Inserir Paciente</button>
+		<hr>
+        
+		<div class=container>
+			<div class=row>
+                <div class=col-sm-3 id=listaEspera>
+                    <h3 align=center style="background-color: #b8daff">LISTA DE ESPERA</h3>
+					<ul class="list-group" id="lista-1">
+					</ul>
+                </div>
+                <div class=col-sm-3 id=alaVerde>
+                    <h3 align=center style= "background-color: #c3e6cb">ALA VERDE</h3>
+					<ul class="list-group" id="lista-2">
+					</ul>
+                </div>
+                <div class=col-sm-3 id=alaAmarela>
+                    <h3 align = center style="background-color: #ffeeba">ALA AMARELA</h3>
+					<ul class="list-group" id="lista-3">
+					</ul>
+                </div>
+                <div class=col-sm-3 id=alaVermelha>
+                    <h3 align=center style="background-color: #f5c6cb">ALA VERMELHA</h3>
+					<ul class="list-group" id="lista-4">
+					</ul>
+                </div>
+			</div>
+		
+		</div>
+		
+		<hr>
+		<h5>&nbsp &nbsp &nbsp Transferência de paciente</h5>
+		&nbsp &nbsp &nbsp
+		<label for="transferenciaPaciente">Informe o ID do paciente a ser transferido: </label>
+		<input class="form-group" type="number" min="1" max="999999" id="idPaciente"></br>
+		&nbsp &nbsp &nbsp
+		<label for="transferenciaPaciente">Informe a ala do paciente a ser transferido: </label>
+		<select name="idTransf" id="origemPac">
+			<option value="listaEspera">LISTA DE ESPERA</option>
+			<option value="alaVerde">ALA VERDE</option>
+			<option value="alaAmarela">ALA AMARELA</option>
+			<option value="alaVermelha">ALA VERMELHA</option>
+		</select></br><br>
+		&nbsp &nbsp &nbsp
+		<label for="transferenciaPaciente"><strong>Clique no botão referente a ala que o paciente deve ir. </strong></label></br>
+		&nbsp &nbsp &nbsp
+		<button class="btn btn-primary" id=transfereEspera>LISTA DE ESPERA</button> &nbsp &nbsp
+		<button class="btn btn-success" id=transfereVerde>ALA VERDE</button> &nbsp &nbsp
+		<button class="btn btn-warning " id=transfereAmarela>ALA AMARELA</button> &nbsp &nbsp
+		<button class="btn btn-danger " id=transfereVermelha>ALA VERMELHA</button> &nbsp &nbsp
+		<button class="btn btn-dark " id=excluirPaciente>EXCLUIR</button>
+    <script>
+        $( document ).ready(function() {
+
+			var cont = "0";
+			var contVerde = "0";
+			var contAmarelo = "0";
+			var contVermelho = "0";
+			var contEspera = "0";
+
+            $('#inserir').click(()=>{
+                var paciente = $("#pessoa").val();
+
+                if(paciente == ""){
+
+                    alert("Por favor, preencha o campo nome.");
+                    $("#pessoa").focus();
+
+                }else{
+					cont++;
+					contEspera++;
+                    var pessoa = '<li class="list-group-item list-group-item-primary" id=espera'+contEspera+'>'+contEspera+' - '+paciente+'</li>';
+                    $("#lista-1").append(pessoa);
+					$("#pessoa").val("");
+                }
+                /* $('nome'+cont).click(function() {
+                      var pessoa=$(this).html();
+                      console.log(pessoa);
+                }); */
+            });
+		
+			$('#transfereVerde').click(()=>{
+				var idPaciente = $("#idPaciente").val();
+				var origemPaciente = $("#origemPac option:selected").val();
+				if(idPaciente < "1"){
+					alert("Por favor, selecione o ID do paciente.");
+					$("#idPaciente").focus();
+				}else if(origemPaciente == "listaEspera") {
+					var completaID = " [id=espera"+idPaciente+"]";
+					var nomePaciente = $("#lista-1"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contVerde++;
+						var pacVerde = '<li class="list-group-item list-group-item-success" id=verde'+contVerde+'>'+contVerde+' - '+nomePaciente+'</li>';
+						$("#lista-2").append(pacVerde);
+						$("#idPaciente").val("");
+						document.getElementById("espera"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na lista de espera!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					} 
+				}else if(origemPaciente == "alaAmarela") {
+					var completaID = " [id=amarela"+idPaciente+"]";
+					var nomePaciente = $("#lista-3"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contVerde++;
+						var pacVerde = '<li class="list-group-item list-group-item-success" id=verde'+contVerde+'>'+contVerde+' - '+nomePaciente+'</li>';
+						$("#lista-2").append(pacVerde);
+						$("#idPaciente").val("");
+						document.getElementById("amarela"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na ala amarela!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					}
+				}else if(origemPaciente == "alaVermelha") {
+					var completaID = " [id=vermelha"+idPaciente+"]";
+					var nomePaciente = $("#lista-4"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contVerde++;
+						var pacVerde = '<li class="list-group-item list-group-item-success" id=verde'+contVerde+'>'+contVerde+' - '+nomePaciente+'</li>';
+						$("#lista-2").append(pacVerde);
+						$("#idPaciente").val("");
+						document.getElementById("vermelha"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na ala amarela!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					}
+				}else{
+					alert("Escolha uma opção de origem diferente do destino!");
+					$("#idPaciente").val("");
+				}
+			});
+			
+			$('#transfereAmarela').click(()=>{
+				var idPaciente = $("#idPaciente").val();
+				var origemPaciente = $("#origemPac option:selected").val();
+				if(idPaciente < "1"){
+					alert("Por favor, selecione o ID do paciente.");
+					$("#idPaciente").focus();
+				}else if(origemPaciente == "listaEspera") {
+					var completaID = " [id=espera"+idPaciente+"]";
+					var nomePaciente = $("#lista-1"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contAmarelo++;
+						var pacAmarelo = '<li class="list-group-item list-group-item-warning" id=amarela'+contAmarelo+'>'+contAmarelo+' - '+nomePaciente+'</li>';
+						$("#lista-3").append(pacAmarelo);
+						$("#idPaciente").val("");
+						document.getElementById("espera"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na lista de espera!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					} 
+				}else if(origemPaciente == "alaVerde") {
+					var completaID = " [id=verde"+idPaciente+"]";
+					var nomePaciente = $("#lista-2"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contAmarelo++;
+						var pacAmarelo = '<li class="list-group-item list-group-item-warning" id=amarela'+contAmarelo+'>'+contAmarelo+' - '+nomePaciente+'</li>';
+						$("#lista-3").append(pacAmarelo);
+						$("#idPaciente").val("");
+						document.getElementById("verde"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na ala verde!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					}
+				}else if(origemPaciente == "alaVermelha") {
+					var completaID = " [id=vermelho"+idPaciente+"]";
+					var nomePaciente = $("#lista-4"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contAmarelo++;
+						var pacAmarelo = '<li class="list-group-item list-group-item-warning" id=amarela'+contAmarelo+'>'+contAmarelo+' - '+nomePaciente+'</li>';
+						$("#lista-3").append(pacAmarelo);
+						$("#idPaciente").val("");
+						document.getElementById("vermelha"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na ala vermelha!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					}
+				}else{
+					alert("Escolha uma opção de origem diferente do destino!");
+					$("#idPaciente").val("");
+				}
+			});
+			
+			$('#transfereVermelha').click(()=>{
+				var idPaciente = $("#idPaciente").val();
+				var origemPaciente = $("#origemPac option:selected").val();
+				if(idPaciente < "1"){
+					alert("Por favor, selecione o ID do paciente.");
+					$("#idPaciente").focus();
+				}else if(origemPaciente == "listaEspera") {
+					var completaID = " [id=espera"+idPaciente+"]";
+					var nomePaciente = $("#lista-1"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contVermelho++;
+						var pacVermelho = '<li class="list-group-item list-group-item-danger" id=vermelha'+contVermelho+'>'+contVermelho+' - '+nomePaciente+'</li>';
+						$("#lista-4").append(pacVermelho);
+						$("#idPaciente").val("");
+						document.getElementById("espera"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na lista de espera!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					} 
+				}else if(origemPaciente == "alaVerde") {
+					var completaID = " [id=verde"+idPaciente+"]";
+					var nomePaciente = $("#lista-2"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contVermelho++;
+						var pacVermelho = '<li class="list-group-item list-group-item-danger" id=vermelha'+contVermelho+'>'+contVermelho+' - '+nomePaciente+'</li>';
+						$("#lista-4").append(pacVermelho);
+						$("#idPaciente").val("");
+						document.getElementById("verde"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na ala verde!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					}
+				}else if(origemPaciente == "alaAmarela") {
+					var completaID = " [id=amarela"+idPaciente+"]";
+					var nomePaciente = $("#lista-3"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contVermelho++;
+						var pacVermelho = '<li class="list-group-item list-group-item-danger" id=vermelha'+contVermelho+'>'+contVermelho+' - '+nomePaciente+'</li>';
+						$("#lista-4").append(pacVermelho);
+						$("#idPaciente").val("");
+						document.getElementById("amarela"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na ala amarela!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					}
+				}else{
+					alert("Escolha uma opção de origem diferente do destino!");
+					$("#idPaciente").val("");
+				}
+			});
+			
+			$('#transfereEspera').click(()=>{
+				var idPaciente = $("#idPaciente").val();
+				var origemPaciente = $("#origemPac option:selected").val();
+				if(idPaciente < "1"){
+					alert("Por favor, selecione o ID do paciente.");
+					$("#idPaciente").focus();
+				}else if(origemPaciente == "alaVermelha") {
+					var completaID = " [id=vermelha"+idPaciente+"]";
+					var nomePaciente = $("#lista-4"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contEspera++;
+						var pacEspera = '<li class="list-group-item list-group-item-primary" id=espera'+contEspera+'>'+contEspera+' - '+nomePaciente+'</li>';
+						$("#lista-1").append(pacEspera);
+						$("#idPaciente").val("");
+						document.getElementById("vermelha"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na ala vermelha!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					} 
+				}else if(origemPaciente == "alaVerde") {
+					var completaID = " [id=verde"+idPaciente+"]";
+					var nomePaciente = $("#lista-2"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contEspera++;
+						var pacEspera = '<li class="list-group-item list-group-item-primary" id=espera'+contEspera+'>'+contEspera+' - '+nomePaciente+'</li>';
+						$("#lista-1").append(pacEspera);
+						$("#idPaciente").val("");
+						document.getElementById("verde"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na ala verde!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					}
+				}else if(origemPaciente == "alaAmarela") {
+					var completaID = " [id=amarela"+idPaciente+"]";
+					var nomePaciente = $("#lista-3"+completaID).text();
+					var nomePaciente = nomePaciente.substring(nomePaciente.indexOf("-") + 2);
+					if(nomePaciente.length > "1"){
+						contEspera++;
+						var pacEspera = '<li class="list-group-item list-group-item-primary" id=espera'+contEspera+'>'+contEspera+' - '+nomePaciente+'</li>';
+						$("#lista-1").append(pacEspera);
+						$("#idPaciente").val("");
+						document.getElementById("amarela"+idPaciente).remove();
+					 }else{
+						alert("ID "+idPaciente+" não existe na ala amarela!");
+						$("#idPaciente").val("");
+						$("#idPaciente").focus();
+					}
+				}else{
+					alert("Escolha uma opção de origem diferente do destino!");
+					$("#idPaciente").val("");
+				}
+			});
+			
+			$('#excluirPaciente').click(()=>{
+				var idPaciente = $("#idPaciente").val();
+				var origemPaciente = $("#origemPac option:selected").val();
+				if(idPaciente < "1"){
+					alert("Por favor, selecione o ID do paciente.");
+					$("#idPaciente").focus();
+				}else if(origemPaciente == "listaEspera") {
+					document.getElementById("espera"+idPaciente).remove();
+				}else if(origemPaciente == "alaVerde") {
+					document.getElementById("verde"+idPaciente).remove();
+				}else if(origemPaciente == "alaAmarela") {
+					document.getElementById("amarela"+idPaciente).remove();
+				}else if(origemPaciente == "alaVermelha") {
+					document.getElementById("vermelha"+idPaciente).remove();
+				}
+			});
+        });
+    </script>
+	</body>
+</html>
